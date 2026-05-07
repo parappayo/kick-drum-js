@@ -12,7 +12,7 @@ body {
 }
 
 main {
-  width: min(720px, 98vw);
+  width: min(900px, 98vw);
   padding: 24px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.77);

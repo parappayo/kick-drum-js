@@ -16,6 +16,9 @@ function getKickTiming() {
   const pitchStart = Number.parseFloat(
     document.getElementById("pitchStart").value,
   );
+  const pitchHold = Number.parseFloat(
+    document.getElementById("pitchHold").value,
+  );
   const pitchDecay = Number.parseFloat(
     document.getElementById("pitchDecay").value,
   );
@@ -23,7 +26,7 @@ function getKickTiming() {
     document.getElementById("gainDecay").value,
   );
   const drive = Number.parseFloat(document.getElementById("drive").value);
-  return { pitchStart, pitchDecay, gainDecay, drive };
+  return { pitchStart, pitchHold, pitchDecay, gainDecay, drive };
 }
 
 /** @param {number} amount 0 (clean) … 1 (heavy) */
@@ -49,15 +52,17 @@ function clamp(n, lo, hi) {
  * @param {BaseAudioContext} ctx
  * @param {AudioNode} destination
  * @param {number} now
- * @param {{ pitchStart: number, pitchDecay: number, gainDecay: number, drive: number }} timing
+ * @param {{ pitchStart: number, pitchHold: number, pitchDecay: number, gainDecay: number, drive: number }} timing
  */
 function scheduleKick(ctx, destination, now, timing) {
-  const { pitchStart, pitchDecay, gainDecay, drive } = timing;
+  const { pitchStart, pitchHold, pitchDecay, gainDecay, drive } = timing;
 
-  const pitchT = Math.max(MIN_RAMP_S, pitchDecay);
+  const holdT = Math.max(0, pitchHold);
+  const pitchDecayT = Math.max(MIN_RAMP_S, pitchDecay);
   const gainT = Math.max(MIN_RAMP_S, gainDecay);
 
-  const stopTime = now + Math.max(pitchDecay, gainDecay);
+  const pitchEnvEnd = holdT + pitchDecayT;
+  const stopTime = now + Math.max(pitchEnvEnd, gainDecay);
 
   const oscillator = ctx.createOscillator();
   oscillator.type = "sine";
@@ -69,8 +74,13 @@ function scheduleKick(ctx, destination, now, timing) {
   waveShaper.curve = makeDriveShaperCurve(drive);
   waveShaper.oversample = "4x";
 
+  // 909-style: hold start pitch, then exponential decay to body pitch.
   oscillator.frequency.setValueAtTime(pitchStart, now);
-  oscillator.frequency.exponentialRampToValueAtTime(END_PITCH_HZ, now + pitchT);
+  oscillator.frequency.setValueAtTime(pitchStart, now + holdT);
+  oscillator.frequency.exponentialRampToValueAtTime(
+    END_PITCH_HZ,
+    now + holdT + pitchDecayT,
+  );
 
   gainNode.gain.exponentialRampToValueAtTime(0.001, now + gainT);
 
@@ -143,7 +153,8 @@ function downloadBlob(blob, filename) {
 
 async function exportKickWav() {
   const timing = getKickTiming();
-  const durationSec = Math.max(timing.pitchDecay, timing.gainDecay);
+  const pitchEnvSec = timing.pitchHold + timing.pitchDecay;
+  const durationSec = Math.max(pitchEnvSec, timing.gainDecay);
   const ctxLive = getAudioContext();
   const sampleRate = ctxLive.sampleRate;
   const length = Math.ceil(sampleRate * durationSec) + 8;
@@ -176,6 +187,7 @@ document.querySelectorAll("[data-knob]").forEach((field) => {
 });
 
 bindKnobInput("pitchStart");
+bindKnobInput("pitchHold");
 bindKnobInput("pitchDecay");
 bindKnobInput("gainDecay");
 bindKnobInput("drive");
