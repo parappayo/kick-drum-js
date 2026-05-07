@@ -1,0 +1,20 @@
+{
+  "name": "kick-drum",
+  "version": "1.0.0",
+  "description": "Kick drum audio generator",
+  "homepage": "https://github.com/parappayo/kick-drum-js#readme",
+  "bugs": {
+    "url": "https://github.com/parappayo/kick-drum-js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/parappayo/kick-drum-js.git"
+  },
+  "license": "MIT",
+  "author": "Jason Estey",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
