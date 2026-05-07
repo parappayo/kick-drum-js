@@ -4,8 +4,4 @@ Simple kick drum generator demonstrating the use of the Web Audio API. Has pitch
 
 ## Run
 
-Open `index.html` in a modern browser, then click **Play Kick**.
-
-For local serving (optional), from this folder:
-
-`npx serve .`
+Serve as a typical web page. If you have npx installed, `npm start` will work. If you have Python 3 installed, maybe try `python -m http.server` from the project root dir.
