@@ -82,11 +82,9 @@ async function onKickClick() {
   playKick();
 }
 
-function bindKnob(rangeId, valueId, decimals = 2) {
+function bindKnobInput(rangeId) {
   const input = document.getElementById(rangeId);
-  const valueEl = document.getElementById(valueId);
   const update = () => {
-    valueEl.textContent = Number.parseFloat(input.value).toFixed(decimals);
     syncNeedle(input);
   };
   input.addEventListener("input", update);
@@ -97,9 +95,9 @@ document.querySelectorAll("[data-knob]").forEach((field) => {
   attachRotaryKnob(field);
 });
 
-bindKnob("pitchDecay", "pitchDecayVal");
-bindKnob("gainDecay", "gainDecayVal");
-bindKnob("drive", "driveVal");
+bindKnobInput("pitchDecay");
+bindKnobInput("gainDecay");
+bindKnobInput("drive");
 
 const kickBtn = document.getElementById("kickBtn");
 kickBtn.addEventListener("click", onKickClick);

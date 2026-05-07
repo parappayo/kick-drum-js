@@ -12,7 +12,7 @@ body {
 }
 
 main {
-  width: min(460px, 92vw);
+  width: min(560px, 96vw);
   padding: 24px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.77);
@@ -39,17 +39,20 @@ p {
   padding: 12px 16px;
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px 24px;
 }
 
 .knob-row {
-  margin-bottom: 16px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-}
-
-.knob-row:last-child {
+  align-items: center;
   margin-bottom: 0;
+  flex: 0 1 auto;
 }
 
 .knob-label {
@@ -57,6 +60,8 @@ p {
   margin-bottom: 8px;
   font-size: 0.9rem;
   font-weight: 600;
+  text-align: center;
+  width: 100%;
 }
 
 .knob-field {
@@ -64,8 +69,8 @@ p {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 12px;
-  max-width: 280px;
 }
 
 /* Visually hidden; kept focusable for keyboard and AT. */
@@ -120,15 +125,6 @@ p {
   stroke: #111827;
   stroke-width: 3;
   stroke-linecap: round;
-}
-
-.knob-value {
-  margin-left: auto;
-  min-width: 3.25rem;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-  font-size: 0.95rem;
-  color: #374151;
 }
 
 .knob-field:focus-within .knob-dial {
