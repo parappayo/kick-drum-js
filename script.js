@@ -12,6 +12,9 @@ function getAudioContext() {
 }
 
 function getKickTiming() {
+  const pitchStart = Number.parseFloat(
+    document.getElementById("pitchStart").value,
+  );
   const pitchDecay = Number.parseFloat(
     document.getElementById("pitchDecay").value,
   );
@@ -19,7 +22,7 @@ function getKickTiming() {
     document.getElementById("gainDecay").value,
   );
   const drive = Number.parseFloat(document.getElementById("drive").value);
-  return { pitchDecay, gainDecay, drive };
+  return { pitchStart, pitchDecay, gainDecay, drive };
 }
 
 /** @param {number} amount 0 (clean) … 1 (heavy) */
@@ -44,12 +47,14 @@ function clamp(n, lo, hi) {
 function playKick() {
   const ctx = getAudioContext();
   const now = ctx.currentTime;
-  const { pitchDecay, gainDecay, drive } = getKickTiming();
+  const { pitchStart, pitchDecay, gainDecay, drive } = getKickTiming();
 
   const pitchT = Math.max(MIN_RAMP_S, pitchDecay);
   const gainT = Math.max(MIN_RAMP_S, gainDecay);
 
   const stopTime = now + Math.max(pitchDecay, gainDecay);
+
+  const endPitchHz = 45;
 
   const oscillator = ctx.createOscillator();
   oscillator.type = "sine";
@@ -61,8 +66,8 @@ function playKick() {
   waveShaper.curve = makeDriveShaperCurve(drive);
   waveShaper.oversample = "4x";
 
-  oscillator.frequency.setValueAtTime(150, now);
-  oscillator.frequency.exponentialRampToValueAtTime(45, now + pitchT);
+  oscillator.frequency.setValueAtTime(pitchStart, now);
+  oscillator.frequency.exponentialRampToValueAtTime(endPitchHz, now + pitchT);
 
   gainNode.gain.exponentialRampToValueAtTime(0.001, now + gainT);
 
@@ -95,6 +100,7 @@ document.querySelectorAll("[data-knob]").forEach((field) => {
   attachRotaryKnob(field);
 });
 
+bindKnobInput("pitchStart");
 bindKnobInput("pitchDecay");
 bindKnobInput("gainDecay");
 bindKnobInput("drive");

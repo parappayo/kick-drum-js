@@ -11,7 +11,36 @@
       <h1>Kick Drum Synth</h1>
       <fieldset class="knobs">
         <div class="knob-row">
-          <label class="knob-label" for="pitchDecay">Pitch</label>
+          <label class="knob-label" for="pitchStart">Pitch</label>
+          <div class="knob-field" data-knob>
+            <input
+              id="pitchStart"
+              class="knob-range-input"
+              type="range"
+              min="45"
+              max="500"
+              step="1"
+              value="150"
+            />
+            <div class="knob-dial" aria-hidden="true">
+              <svg class="knob-svg" viewBox="0 0 64 64" aria-hidden="true">
+                <circle
+                  class="knob-track"
+                  cx="32"
+                  cy="32"
+                  r="26"
+                  fill="none"
+                  stroke-width="4"
+                />
+                <g class="knob-needle" transform="rotate(0 32 32)">
+                  <line class="knob-indicator-line" x1="32" y1="32" x2="32" y2="10" />
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="knob-row">
+          <label class="knob-label" for="pitchDecay">Pitch decay</label>
           <div class="knob-field" data-knob>
             <input
               id="pitchDecay"
