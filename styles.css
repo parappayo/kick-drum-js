@@ -142,6 +142,22 @@ button {
   color: #fff;
 }
 
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.btn-secondary:hover {
+  background: #d1d5db;
+}
+
 #status {
   margin-top: 12px;
   font-size: 0.95rem;
